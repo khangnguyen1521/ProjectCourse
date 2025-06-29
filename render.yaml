@@ -1,0 +1,44 @@
+services:
+  # Backend API Service
+  - type: web
+    name: projectcourse-backend
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false # Set this in Render dashboard
+    
+  # Frontend Static Site
+  - type: web
+    name: projectcourse-frontend
+    runtime: static
+    region: singapore
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: projectcourse-backend
+          property: host
+        
+# Optional: Database (if you want to use Render's PostgreSQL instead of MongoDB Atlas)
+# databases:
+#   - name: projectcourse-db
+#     plan: free
+#     region: singapore
+
+# Auto-deploy settings
+branches:
+  - name: master
+    previewsEnabled: false
