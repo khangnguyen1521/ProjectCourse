@@ -25,6 +25,22 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes); // Gắn auth routes NGAY SAU middleware
 
+// Root endpoint - API information
+app.get('/', (req, res) => {
+  res.json({
+    message: 'ProjectCourse API Server',
+    version: '1.0.0',
+    status: 'Running',
+    endpoints: {
+      health: '/health',
+      auth: '/api/auth/*',
+      courses: '/courses',
+      test: '/api/test/setup-sample-data'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
