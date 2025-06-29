@@ -236,8 +236,8 @@ MIT License - xem file LICENSE để biết thêm chi tiết.
 
 ## 📞 Liên hệ
 
-- Email: support@projectcourse.com
-- GitHub: [@projectcourse](https://github.com/projectcourse)
+- Email: thanhthanthiendia12@gmail.com
+- GitHub: https://github.com/khangnguyen1521
 
 ---
 
