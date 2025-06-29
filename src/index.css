@@ -1,0 +1,319 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Better typography */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom breakpoints */
+@layer utilities {
+  @variants responsive {
+    .container {
+      @apply mx-auto px-4;
+      max-width: 1280px;
+    }
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better typography */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Prevent content shift on mobile menu toggle */
+body.menu-open {
+  overflow: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Course Card Hover Effect */
+.course-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Blob Animation */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Gradient Text Animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Slide In Animation */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s ease-out;
+}
+
+/* Glassmorphism Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Button Hover Effects */
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Text Gradient */
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading Animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Bounce Animation */
+@keyframes bounce-soft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-soft {
+  animation: bounce-soft 2s ease-in-out infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-7xl {
+    font-size: 3rem;
+  }
+  
+  .text-5xl {
+    font-size: 2.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
