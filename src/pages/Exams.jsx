@@ -15,6 +15,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { API_ENDPOINTS } from "../config/api";
 
 // Bảng ánh xạ giữa tên môn thi và courseId trong hệ thống
 const subjectToCourseMap = {
@@ -116,7 +117,7 @@ const ExamPage = () => {
     setIsSubmitted(true);
   
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/submit-exam", {
+              const response = await axios.post(`${API_ENDPOINTS.AUTH}/submit-exam`, {
         userId: user.id,
         courseId: selectedSubject,
         score: calculatedScore,

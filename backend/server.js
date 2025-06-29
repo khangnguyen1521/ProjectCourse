@@ -14,9 +14,11 @@ console.log('🗄️ MongoDB URI:', process.env.MONGO_URI ? 'Set ✅' : 'Not set
 // Middlewares
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com'] // Thay bằng domain frontend thực tế
-    : 'http://localhost:3000',
-  credentials: true
+    ? ['https://your-frontend-domain.com', 'https://projectcourse-frontend.onrender.com'] // Production domains
+    : ['http://localhost:3000', 'http://localhost:3001'], // Development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.use(express.json());

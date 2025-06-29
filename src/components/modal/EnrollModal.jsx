@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_ENDPOINTS } from "../../config/api";
 
 const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
   const { user, updateProgress, login } = useAuth();
@@ -17,7 +18,7 @@ const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/enroll-course', {
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/enroll-course`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

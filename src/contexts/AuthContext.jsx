@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext(null);
 
@@ -33,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       console.log('Fetching dashboard stats for user:', user.id);
-      const response = await fetch(`http://localhost:5000/api/auth/dashboard-stats/${user.id}`);
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/dashboard-stats/${user.id}`);
       if (response.ok) {
         const data = await response.json();
         console.log('Dashboard stats received:', data);
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     if (!user?.id) return;
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/update-progress', {
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/update-progress`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     if (!user?.id) return false;
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/update-profile', {
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     
     try {
       console.log('Fetching user courses for user:', user.id);
-      const response = await fetch(`http://localhost:5000/api/auth/user-courses/${user.id}`);
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/user-courses/${user.id}`);
       if (response.ok) {
         const data = await response.json();
         console.log('User courses received:', data);
@@ -144,7 +145,7 @@ export const AuthProvider = ({ children }) => {
     
     try {
       console.log('Fetching user exams for user:', user.id);
-      const response = await fetch(`http://localhost:5000/api/auth/user-exams/${user.id}`);
+      const response = await fetch(`${API_ENDPOINTS.AUTH}/user-exams/${user.id}`);
       if (response.ok) {
         const data = await response.json();
         console.log('User exams received:', data);

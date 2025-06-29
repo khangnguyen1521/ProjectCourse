@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -52,7 +53,7 @@ const Register = () => {
       validateForm();
   
       // Gọi API server để register
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
+      const res = await axios.post(`${API_ENDPOINTS.AUTH}/register`, {
         name: formData.firstName + ' ' + formData.lastName,
         email: formData.email,
         password: formData.password.trim(),
@@ -60,7 +61,7 @@ const Register = () => {
       });
   
       // Sau khi đăng ký thành công, tự động đăng nhập
-      const loginRes = await axios.post('http://localhost:5000/api/auth/login', {
+      const loginRes = await axios.post(`${API_ENDPOINTS.AUTH}/login`, {
         email: formData.email,
         password: formData.password,
       });

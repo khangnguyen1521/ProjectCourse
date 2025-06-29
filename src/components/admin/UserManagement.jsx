@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const UserManagement = () => {
   const { user } = useAuth();
@@ -26,7 +27,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/allusers');
+      const res = await axios.get(`${API_ENDPOINTS.AUTH}/allusers`);
       setUsers(res.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -46,7 +47,7 @@ const UserManagement = () => {
     
     setDeleteLoading(true);
     try {
-      await axios.delete(`http://localhost:5000/api/auth/delete-user/${userToDelete._id}`);
+              await axios.delete(`${API_ENDPOINTS.AUTH}/delete-user/${userToDelete._id}`);
       // Cập nhật lại danh sách người dùng sau khi xóa
       setUsers(users.filter(u => u._id !== userToDelete._id));
       setShowConfirmModal(false);
