@@ -6,6 +6,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Log environment info
+console.log('🚀 Starting server...');
+console.log('📊 Port:', PORT);
+console.log('🗄️ MongoDB URI:', process.env.MONGO_URI ? 'Set ✅' : 'Not set ❌');
+
 // Middlewares
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
