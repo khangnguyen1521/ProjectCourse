@@ -14,7 +14,10 @@ console.log('🗄️ MongoDB URI:', process.env.MONGO_URI ? 'Set ✅' : 'Not set
 // Middlewares
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com', 'https://projectcourse-frontend.onrender.com'] // Production domains
+    ? [
+        'https://projectcourse-frontend.onrender.com',
+        'https://projectcourse-frontend-*.onrender.com'
+      ]
     : ['http://localhost:3000', 'http://localhost:3001'], // Development
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
