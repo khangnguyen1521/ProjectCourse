@@ -53,17 +53,23 @@ app.get('/health', (req, res) => {
 });
 
 // Kết nối MongoDB
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/projectcourse';
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/CourseDB';
 mongoose.connect(mongoUri)
-.then(() => console.log('✅ Connected to MongoDB successfully'))
+.then(() => {
+  console.log('✅ Connected to MongoDB successfully');
+  console.log('🌐 Database host:', mongoose.connection.host);
+  console.log('📊 Database name:', mongoose.connection.name);
+  console.log('🔗 Full connection string:', mongoUri?.replace(/\/\/[^:]+:[^@]+@/, '//***:***@'));
+})
 .catch((err) => {
   console.error('❌ MongoDB connection error:', err);
   console.log('💡 Please check your MONGO_URI environment variable');
+  console.log('💡 Make sure MONGO_URI ends with /CourseDB');
 });
 
-// Course Schema
+// Course Schema - Connect to CourseDB.Course collection
 const CourseSchema = new mongoose.Schema({}, { strict: false });
-const Course = mongoose.model('Course', CourseSchema, 'courses'); 
+const Course = mongoose.model('Course', CourseSchema, 'Course'); 
 
 // API courses
 app.get('/courses', async (req, res) => {
