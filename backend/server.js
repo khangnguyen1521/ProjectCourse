@@ -63,16 +63,22 @@ mongoose.connect(mongoUri)
 
 // Course Schema
 const CourseSchema = new mongoose.Schema({}, { strict: false });
-const Course = mongoose.model('Course', CourseSchema, 'Course'); 
+const Course = mongoose.model('Course', CourseSchema, 'courses'); 
 
 // API courses
 app.get('/courses', async (req, res) => {
   try {
+    // Debug: List all collections in database
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    console.log('🗂️ Available collections:', collections.map(c => c.name));
+    
     const courses = await Course.find();
-    console.log('DATA FROM DATABASE:', courses);
+    console.log('📚 Courses found:', courses.length);
+    console.log('📊 Sample course data:', courses[0]);
+    
     res.json(courses);
   } catch (err) {
-    console.error('ERROR:', err);
+    console.error('❌ ERROR:', err);
     res.status(500).json({ message: err.message });
   }
 });
