@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { API_ENDPOINTS } from '../../../config/api';
+
 
 const LessonLayout = ({
   courseName,
@@ -113,7 +115,7 @@ const BiologyLesson = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/courses')
+    fetch(${API_ENDPOINTS.COURSES})
       .then(res => res.json())
       .then(data => {
         if (data.length > 3) {
