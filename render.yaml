@@ -3,7 +3,9 @@ services:
   - type: web
     name: projectcourse-backend
     runtime: node
-    buildCommand: cd backend && npm install
+    buildCommand: |
+      cd backend
+      npm ci --only=production=false
     startCommand: cd backend && npm start
     healthCheckPath: /health
     envVars:
@@ -19,7 +21,9 @@ services:
   - type: web
     name: projectcourse-frontend
     runtime: static
-    buildCommand: npm install && npm run build
+    buildCommand: |
+      npm ci --only=production=false
+      npm run build
     staticPublishPath: ./build
     envVars:
       - key: REACT_APP_API_URL
@@ -27,6 +31,8 @@ services:
           type: web
           name: projectcourse-backend
           property: host
+      - key: NODE_ENV
+        value: production
     autoDeploy: true
     routes:
       - type: rewrite
