@@ -15,8 +15,9 @@ console.log('🗄️ MongoDB URI:', process.env.MONGO_URI ? 'Set ✅' : 'Not set
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? [
+        'https://projectcourse.onrender.com',
         'https://projectcourse-frontend.onrender.com',
-        'https://projectcourse-frontend-*.onrender.com'
+        'https://projectcourse-*.onrender.com'
       ]
     : ['http://localhost:3000', 'http://localhost:3001'], // Development
   credentials: true,
