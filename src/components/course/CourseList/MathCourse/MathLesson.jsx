@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { API_ENDPOINTS } from '../../../config/api';
-
-
-// LessonLayout: Có thể tách ra file riêng để dùng chung cho các môn
+// // LessonLayout: Có thể tách ra file riêng để dùng chung cho các môn
 const LessonLayout = ({
   courseName,
   lessons,
@@ -123,7 +120,8 @@ const MathLesson = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(${API_ENDPOINTS.COURSES})
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    fetch(`${API_URL}/courses`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {

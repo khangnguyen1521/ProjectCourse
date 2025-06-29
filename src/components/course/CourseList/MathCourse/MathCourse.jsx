@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { API_ENDPOINTS } from '../../../config/api';
 
 const LessonCard = ({ id, title, description }) => (
   <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -21,7 +20,8 @@ const MathCourse = () => {
   const [lessons, setLessons] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINTS.COURSES}`)
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    fetch(`${API_URL}/courses`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {

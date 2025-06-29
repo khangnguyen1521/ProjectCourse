@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API_ENDPOINTS } from '../../../config/api';
 
 
 const LessonCard = ({ id, title, description }) => (
@@ -22,7 +21,8 @@ const BiologyCourse = () => {
   const [lessons, setLessons] = useState([]);
 
   useEffect(() => {
-    fetch(${API_ENDPOINTS.COURSES})
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    fetch(`${API_URL}/courses`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 3) {
