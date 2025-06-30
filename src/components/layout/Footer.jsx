@@ -153,7 +153,7 @@ const Footer = () => {
                 className="flex items-center text-gray-300"
               >
                 <span className="w-5 h-5 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mr-3 flex-shrink-0"></span>
-                <span>0909090909</span>
+                <span>0583496990(Đừng gọi vào buổi tối xin cảm ơn)</span>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
