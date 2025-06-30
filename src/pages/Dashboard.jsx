@@ -62,6 +62,21 @@ const Dashboard = () => {
     return imageMap[courseId] || '/img/mathcourse.png';
   };
 
+  const getCourseRouteId = (courseId) => {
+    const routeMap = {
+      'Math': '1',
+      'Physics': '2',
+      'Chemistry': '3',
+      'Biology': '4',
+      'History': '5',
+      'Geography': '6',
+      'Literature': '7',
+      'Civic': '8',
+      'English': '9'
+    };
+    return routeMap[courseId] || courseId;
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('vi-VN');
   };
@@ -345,7 +360,7 @@ const Dashboard = () => {
                       <p>Lần truy cập cuối: {formatDate(course.lastAccessed)}</p>
                     </div>
                     <Link 
-                      to={`/courses/${course.courseId?.toLowerCase() || course.id.toLowerCase()}`}
+                      to={`/courses/${getCourseRouteId(course.courseId || course.id)}`}
                       className="w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition-colors block"
                     >
                       Tiếp tục học
