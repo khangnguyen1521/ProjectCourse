@@ -649,4 +649,273 @@ router.post('/reset-password/:token', async (req, res) => {
   }
 });
 
+// ==================== PAYMENT & TOP-UP APIs ====================
+
+// Payment Transaction Schema
+const paymentTransactionSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  transactionCode: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['vnpay', 'momo'],
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  },
+  coins: {
+    type: Number,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'success', 'failed', 'expired'],
+    default: 'pending'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  completedAt: {
+    type: Date
+  },
+  expiresAt: {
+    type: Date,
+    default: () => new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+  }
+});
+
+const PaymentTransaction = mongoose.model('PaymentTransaction', paymentTransactionSchema);
+
+// API: Tạo giao dịch nạp xu
+router.post('/create-topup-transaction', async (req, res) => {
+  try {
+    const { userId, transactionCode, paymentMethod, amount, coins } = req.body;
+
+    // Kiểm tra user tồn tại
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại' });
+    }
+
+    // Kiểm tra giao dịch đã tồn tại chưa
+    const existingTransaction = await PaymentTransaction.findOne({ transactionCode });
+    if (existingTransaction) {
+      return res.status(400).json({ message: 'Mã giao dịch đã tồn tại' });
+    }
+
+    // Tạo giao dịch mới
+    const transaction = new PaymentTransaction({
+      userId,
+      transactionCode,
+      paymentMethod,
+      amount,
+      coins,
+      status: 'pending'
+    });
+
+    await transaction.save();
+
+    res.json({
+      message: 'Tạo giao dịch thành công',
+      transaction: {
+        id: transaction._id,
+        transactionCode: transaction.transactionCode,
+        amount: transaction.amount,
+        coins: transaction.coins,
+        status: transaction.status,
+        expiresAt: transaction.expiresAt
+      }
+    });
+  } catch (error) {
+    console.error('Error creating transaction:', error);
+    res.status(500).json({ message: 'Lỗi server khi tạo giao dịch' });
+  }
+});
+
+// API: Kiểm tra trạng thái thanh toán và cộng xu
+router.post('/check-payment-status', async (req, res) => {
+  try {
+    const { userId, transactionCode, paymentMethod, amount, coins } = req.body;
+
+    // Kiểm tra user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại' });
+    }
+
+    // Tìm hoặc tạo transaction
+    let transaction = await PaymentTransaction.findOne({ transactionCode });
+    
+    if (!transaction) {
+      // Tạo transaction mới nếu chưa có
+      transaction = new PaymentTransaction({
+        userId,
+        transactionCode,
+        paymentMethod,
+        amount,
+        coins,
+        status: 'pending'
+      });
+      await transaction.save();
+    }
+
+    // Kiểm tra nếu đã hết hạn
+    if (new Date() > transaction.expiresAt && transaction.status === 'pending') {
+      transaction.status = 'expired';
+      await transaction.save();
+      return res.json({
+        status: 'expired',
+        message: 'Giao dịch đã hết hạn'
+      });
+    }
+
+    // Kiểm tra nếu đã hoàn thành
+    if (transaction.status === 'success') {
+      return res.json({
+        status: 'success',
+        message: 'Giao dịch đã được xử lý',
+        newBalance: user.coins
+      });
+    }
+
+    // ========================================
+    // SIMULATION: Trong thực tế, bạn cần:
+    // 1. Gọi API của VNPay/Momo để kiểm tra thanh toán
+    // 2. Hoặc nhận webhook từ cổng thanh toán
+    // 
+    // Hiện tại: Tự động chấp nhận sau 30 giây (để test)
+    // ========================================
+    
+    const transactionAge = (new Date() - new Date(transaction.createdAt)) / 1000; // seconds
+    
+    // DEMO: Tự động "thanh toán thành công" sau 30 giây
+    // TODO: Thay thế bằng logic kiểm tra thực tế với API VNPay/Momo
+    const paymentVerified = transactionAge > 30; // Giả lập thanh toán sau 30s
+    
+    if (paymentVerified && transaction.status === 'pending') {
+      // Cộng xu cho user
+      user.coins = (user.coins || 0) + coins;
+      await user.save();
+
+      // Cập nhật transaction
+      transaction.status = 'success';
+      transaction.completedAt = new Date();
+      await transaction.save();
+
+      console.log(`✅ Payment verified: User ${userId} received ${coins} coins. New balance: ${user.coins}`);
+
+      return res.json({
+        status: 'success',
+        message: 'Thanh toán thành công',
+        coinsAdded: coins,
+        newBalance: user.coins
+      });
+    }
+
+    // Vẫn đang chờ thanh toán
+    res.json({
+      status: 'pending',
+      message: 'Đang chờ thanh toán',
+      timeRemaining: Math.floor((transaction.expiresAt - new Date()) / 1000)
+    });
+
+  } catch (error) {
+    console.error('Error checking payment:', error);
+    res.status(500).json({ message: 'Lỗi server khi kiểm tra thanh toán' });
+  }
+});
+
+// API: Lấy lịch sử nạp xu
+router.get('/payment-history/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại' });
+    }
+
+    const transactions = await PaymentTransaction.find({ userId })
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.json({
+      transactions: transactions.map(t => ({
+        id: t._id,
+        transactionCode: t.transactionCode,
+        paymentMethod: t.paymentMethod,
+        amount: t.amount,
+        coins: t.coins,
+        status: t.status,
+        createdAt: t.createdAt,
+        completedAt: t.completedAt
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching payment history:', error);
+    res.status(500).json({ message: 'Lỗi server khi lấy lịch sử thanh toán' });
+  }
+});
+
+// API: Admin - Xác nhận thanh toán thủ công
+router.post('/admin/confirm-payment', async (req, res) => {
+  try {
+    const { transactionCode, adminUserId } = req.body;
+
+    // Kiểm tra admin
+    const admin = await User.findById(adminUserId);
+    if (!admin || admin.role !== 'admin') {
+      return res.status(403).json({ message: 'Không có quyền thực hiện' });
+    }
+
+    // Tìm transaction
+    const transaction = await PaymentTransaction.findOne({ transactionCode });
+    if (!transaction) {
+      return res.status(404).json({ message: 'Không tìm thấy giao dịch' });
+    }
+
+    if (transaction.status !== 'pending') {
+      return res.status(400).json({ message: 'Giao dịch không ở trạng thái chờ xử lý' });
+    }
+
+    // Cộng xu cho user
+    const user = await User.findById(transaction.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Người dùng không tồn tại' });
+    }
+
+    user.coins = (user.coins || 0) + transaction.coins;
+    await user.save();
+
+    // Cập nhật transaction
+    transaction.status = 'success';
+    transaction.completedAt = new Date();
+    await transaction.save();
+
+    res.json({
+      message: 'Xác nhận thanh toán thành công',
+      transaction: {
+        transactionCode: transaction.transactionCode,
+        userId: user._id,
+        userName: user.name,
+        coinsAdded: transaction.coins,
+        newBalance: user.coins
+      }
+    });
+  } catch (error) {
+    console.error('Error confirming payment:', error);
+    res.status(500).json({ message: 'Lỗi server khi xác nhận thanh toán' });
+  }
+});
+
 module.exports = router;

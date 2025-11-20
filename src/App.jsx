@@ -11,6 +11,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
+import TopUp from './pages/TopUp';
 
 // Admin Route Component
 const AdminRoute = ({ children }) => {
@@ -68,6 +69,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/topup"
+              element={
+                <ProtectedRoute>
+                  <TopUp />
                 </ProtectedRoute>
               }
             />
