@@ -15,14 +15,14 @@ const QRPayment = ({ paymentMethod, amount, coins, transactionCode, onBack, onCa
   // Payment configuration - User có thể thay đổi sau
   const paymentConfig = {
     vnpay: {
-      accountNo: '0123456789',
-      accountName: 'NGUYEN VAN A',
+      accountNo: '0091000671434',
+      accountName: 'NGUYEN MINH KHANG',
       bankName: 'Vietcombank',
       bankCode: 'VCB',
     },
     momo: {
-      phoneNumber: '0987654321',
-      accountName: 'NGUYEN VAN A',
+      phoneNumber: '0583496990',
+      accountName: 'NGUYEN MINH KHANG',
     }
   };
 
