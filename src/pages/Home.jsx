@@ -197,7 +197,7 @@ const Home = () => {
           >
             <div className="relative z-10">
               <img 
-                src="/img/techingheader.png"
+                src="/public/icons/VietLearn.png"
                 alt="Online Learning"
                 className="w-full max-w-lg mx-auto drop-shadow-2xl"
               />
