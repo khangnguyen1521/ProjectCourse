@@ -918,4 +918,81 @@ router.post('/admin/confirm-payment', async (req, res) => {
   }
 });
 
+// API: Admin - Lấy tất cả transactions
+router.get('/admin/all-transactions', async (req, res) => {
+  try {
+    // Lấy tất cả transactions và populate user info
+    const transactions = await PaymentTransaction.find()
+      .sort({ createdAt: -1 })
+      .limit(100);
+
+    // Lấy thông tin user cho mỗi transaction
+    const transactionsWithUserInfo = await Promise.all(
+      transactions.map(async (transaction) => {
+        const user = await User.findById(transaction.userId).select('name email');
+        return {
+          _id: transaction._id,
+          transactionCode: transaction.transactionCode,
+          paymentMethod: transaction.paymentMethod,
+          amount: transaction.amount,
+          coins: transaction.coins,
+          status: transaction.status,
+          createdAt: transaction.createdAt,
+          completedAt: transaction.completedAt,
+          expiresAt: transaction.expiresAt,
+          userName: user?.name,
+          userEmail: user?.email,
+          userId: transaction.userId
+        };
+      })
+    );
+
+    res.json({
+      transactions: transactionsWithUserInfo
+    });
+  } catch (error) {
+    console.error('Error fetching all transactions:', error);
+    res.status(500).json({ message: 'Lỗi server khi lấy danh sách giao dịch' });
+  }
+});
+
+// API: Admin - Từ chối thanh toán
+router.post('/admin/reject-payment', async (req, res) => {
+  try {
+    const { transactionCode, adminUserId } = req.body;
+
+    // Kiểm tra admin
+    const admin = await User.findById(adminUserId);
+    if (!admin || admin.role !== 'admin') {
+      return res.status(403).json({ message: 'Không có quyền thực hiện' });
+    }
+
+    // Tìm transaction
+    const transaction = await PaymentTransaction.findOne({ transactionCode });
+    if (!transaction) {
+      return res.status(404).json({ message: 'Không tìm thấy giao dịch' });
+    }
+
+    if (transaction.status !== 'pending') {
+      return res.status(400).json({ message: 'Giao dịch không ở trạng thái chờ xử lý' });
+    }
+
+    // Cập nhật transaction
+    transaction.status = 'failed';
+    transaction.completedAt = new Date();
+    await transaction.save();
+
+    res.json({
+      message: 'Đã từ chối giao dịch',
+      transaction: {
+        transactionCode: transaction.transactionCode,
+        status: transaction.status
+      }
+    });
+  } catch (error) {
+    console.error('Error rejecting payment:', error);
+    res.status(500).json({ message: 'Lỗi server khi từ chối thanh toán' });
+  }
+});
+
 module.exports = router;

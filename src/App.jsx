@@ -12,6 +12,7 @@ import Register from './components/auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
 import TopUp from './pages/TopUp';
+import PaymentManagement from './components/admin/PaymentManagement';
 
 // Admin Route Component
 const AdminRoute = ({ children }) => {
@@ -61,6 +62,14 @@ const App = () => {
               element={
                 <AdminRoute>
                   <UserManagement />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/payment-management"
+              element={
+                <AdminRoute>
+                  <PaymentManagement />
                 </AdminRoute>
               }
             />

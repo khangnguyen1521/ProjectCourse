@@ -88,12 +88,20 @@ const UserProfile = () => {
 
           {/*Chỉ admin mới thấy link User Management */}
           {user.role === 'admin' && (
-            <Link
-              to="/user-management"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              Quản lý người dùng
-            </Link>
+            <>
+              <Link
+                to="/user-management"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Quản lý người dùng
+              </Link>
+              <Link
+                to="/payment-management"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Quản lý thanh toán
+              </Link>
+            </>
           )}
           <button
             onClick={handleLogout}
