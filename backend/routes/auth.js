@@ -569,7 +569,7 @@ router.post('/forgot-password', async (req, res) => {
     
     // Gửi email
     const mailOptions = {
-      from: process.env.EMAIL_FROM || '"Course & Exam" <noreply@example.com>',
+      from: process.env.EMAIL_FROM || '"VietLearn" <noreply@vietlearn.edu.vn>',
       to: user.email,
       subject: 'Đặt lại mật khẩu',
       html: `

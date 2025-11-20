@@ -1,6 +1,6 @@
-# ProjectCourse - Hệ thống học tập trực tuyến
+# VietLearn - Nền tảng học tập trực tuyến
 
-Một ứng dụng web học tập trực tuyến hiện đại được xây dựng với React, Node.js và MongoDB.
+Một nền tảng học tập trực tuyến hiện đại và chuyên nghiệp được xây dựng với React, Node.js và MongoDB.
 
 ## 🚀 Tính năng chính
 

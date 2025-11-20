@@ -38,12 +38,21 @@ const Footer = () => {
             viewport={{ once: true }}
             className="lg:col-span-1"
           >
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">C</span>
+            <div className="flex items-center space-x-3 mb-6">
+              <img 
+                src="/icons/VietLearn.png" 
+                alt="VietLearn Logo" 
+                className="w-12 h-12 object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextElementSibling.style.display = 'flex';
+                }}
+              />
+              <div className="w-12 h-12 bg-blue-600 rounded-lg items-center justify-center hidden">
+                <span className="text-white font-bold text-lg">VL</span>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Course & Exam
+              <span className="text-2xl font-bold text-white">
+                VietLearn
               </span>
             </div>
             <p className="text-gray-300 leading-relaxed mb-6">
@@ -179,7 +188,7 @@ const Footer = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © 2024 Course & Exam. Tất cả quyền được bảo lưu.
+              © 2024 VietLearn. Tất cả quyền được bảo lưu.
             </p>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
