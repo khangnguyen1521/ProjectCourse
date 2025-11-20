@@ -176,12 +176,12 @@ const QRPayment = ({ paymentMethod, amount, coins, transactionCode, onBack, onCa
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Thanh toán thành công!</h2>
           <p className="text-gray-600 mb-6">{message.text}</p>
-          <button
-            onClick={onCancel}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
-          >
-            Hoàn tất
-          </button>
+           <button
+             onClick={onCancel}
+             className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+           >
+             Hoàn tất
+           </button>
         </motion.div>
       ) : (
         // Payment State
@@ -278,8 +278,8 @@ const QRPayment = ({ paymentMethod, amount, coins, transactionCode, onBack, onCa
               </div>
             </div>
 
-            {/* Bank/Momo Info */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-6">
+             {/* Bank/Momo Info */}
+             <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
               <h4 className="font-semibold text-gray-900 mb-3">
                 {paymentMethod === 'vnpay' ? 'Thông tin tài khoản' : 'Thông tin Momo'}
               </h4>
@@ -344,11 +344,11 @@ const QRPayment = ({ paymentMethod, amount, coins, transactionCode, onBack, onCa
             )}
 
             {/* Check Status Button */}
-            <button
-              onClick={checkPaymentStatus}
-              disabled={checking}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 flex items-center justify-center space-x-2"
-            >
+             <button
+               onClick={checkPaymentStatus}
+               disabled={checking}
+               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+             >
               {checking && (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
               )}

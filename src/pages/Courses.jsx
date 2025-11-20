@@ -220,21 +220,20 @@ const Courses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Khám phá khóa học
             </h1>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
               Chọn khóa học phù hợp với sở thích và mục tiêu học tập của bạn. 
               Tất cả khóa học đều được thiết kế bởi các chuyên gia hàng đầu với giá cả phải chăng.
             </p>
@@ -247,9 +246,9 @@ const Courses = () => {
                   placeholder="Tìm kiếm khóa học..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 text-lg border-0 rounded-full shadow-lg focus:ring-4 focus:ring-blue-300 focus:outline-none"
+                  className="w-full px-6 py-3 text-base border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-all"
                 />
-                <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -290,7 +289,7 @@ const Courses = () => {
                   alt={course.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-medium text-white bg-gradient-to-r ${course.color}`}>
+                <div className="absolute top-4 left-4 px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-200">
                   {course.price.toLocaleString()} xu
                 </div>
                 <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-medium ${getLevelColor(course.level)}`}>
@@ -353,7 +352,7 @@ const Courses = () => {
                 )}
 
                 {/* Action Button */}
-                <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                   {user?.coursesCompleted?.includes(course.courseId) ? 'Tiếp tục học' : 'Đăng ký ngay'}
                 </button>
               </div>
