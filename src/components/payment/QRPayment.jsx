@@ -32,11 +32,12 @@ const QRPayment = ({ paymentMethod, amount, coins, transactionCode, onBack, onCa
     let qrContent = '';
 
     if (paymentMethod === 'vnpay') {
-      // VNPay QR format
+      // VNPay QR format - Sử dụng VietQR
       qrContent = `https://img.vietqr.io/image/${config.bankCode}-${config.accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(`NAP XU ${transactionCode}`)}&accountName=${encodeURIComponent(config.accountName)}`;
     } else if (paymentMethod === 'momo') {
-      // Momo QR format
-      qrContent = `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(`2|99|${config.phoneNumber}|${config.accountName}|${amount}|NAP XU ${transactionCode}`)}`;
+      // Momo Deep Link - Tự động điền thông tin
+      const momoDeepLink = `momo://app?action=payWithApp&amount=${amount}&note=${encodeURIComponent(`NAP XU ${transactionCode}`)}&recipient=${config.phoneNumber}`;
+      qrContent = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(momoDeepLink)}`;
     }
 
     setQrUrl(qrContent);
