@@ -3,7 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_ENDPOINTS } from "../../config/api";
 
-const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
+const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, price, onSuccess }) => {
   const { user, updateProgress, login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -25,7 +25,8 @@ const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
         },
         body: JSON.stringify({
           userId: user.id,
-          courseId: courseId
+          courseId: courseId,
+          price: price || 0
         }),
       });
 
@@ -37,7 +38,8 @@ const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
         // Tự động cập nhật lại context user với logging
         if (data.coursesCompleted) {
           console.log('Updating user with new courses:', data.coursesCompleted);
-          login({ ...user, coursesCompleted: data.coursesCompleted });
+          // Cập nhật cả coins và coursesCompleted
+          login({ ...user, coursesCompleted: data.coursesCompleted, coins: data.coins });
         }
         setTimeout(() => {
           onClose();
@@ -83,9 +85,34 @@ const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
               </div>
               
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Đăng ký khóa học</h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 mb-4">
                 Bạn có muốn đăng ký khóa học <span className="font-semibold text-blue-600">{courseTitle}</span> không?
               </p>
+              
+              {/* Thông tin thanh toán */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-4 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Giá khóa học:</span>
+                  <span className="text-lg font-bold text-blue-600">{price?.toLocaleString()} xu</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Số xu hiện có:</span>
+                  <span className="text-lg font-semibold text-gray-900">{user?.coins?.toLocaleString() || 0} xu</span>
+                </div>
+                <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
+                  <span className="text-gray-600">Số xu còn lại:</span>
+                  <span className={`text-lg font-bold ${(user?.coins || 0) - (price || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {((user?.coins || 0) - (price || 0)).toLocaleString()} xu
+                  </span>
+                </div>
+              </div>
+
+              {/* Cảnh báo không đủ xu */}
+              {(user?.coins || 0) < (price || 0) && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                  <p className="text-sm">⚠️ Bạn không đủ xu để mua khóa học này!</p>
+                </div>
+              )}
 
               {/* Message */}
               {message.text && (
@@ -112,13 +139,13 @@ const EnrollModal = ({ isOpen, onClose, courseTitle, courseId, onSuccess }) => {
                 </button>
                 <button
                   onClick={handleEnroll}
-                  disabled={loading}
+                  disabled={loading || (user?.coins || 0) < (price || 0)}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {loading && (
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   )}
-                  <span>{loading ? 'Đang đăng ký...' : 'Đồng ý'}</span>
+                  <span>{loading ? 'Đang mua...' : 'Mua khóa học'}</span>
                 </button>
               </div>
             </div>

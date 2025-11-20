@@ -18,7 +18,7 @@ const courses = [
     level: "Trung bình",
     rating: 4.8,
     students: 1250,
-    price: "Miễn phí",
+    price: 1200,
     color: "from-amber-500 to-orange-600",
   },
   {
@@ -34,7 +34,7 @@ const courses = [
     level: "Trung bình",
     rating: 4.7,
     students: 980,
-    price: "Miễn phí",
+    price: 1000,
     color: "from-yellow-600 to-yellow-800",
   },
   {
@@ -50,7 +50,7 @@ const courses = [
     level: "Khó",
     rating: 4.6,
     students: 750,
-    price: "Miễn phí",
+    price: 1500,
     color: "from-teal-600 to-teal-800",
   },
   {
@@ -66,7 +66,7 @@ const courses = [
     level: "Trung bình",
     rating: 4.9,
     students: 1100,
-    price: "Miễn phí",
+    price: 1500,
     color: "from-green-500 to-green-700",
   },
   {
@@ -82,7 +82,7 @@ const courses = [
     level: "Dễ",
     rating: 4.5,
     students: 890,
-    price: "Miễn phí",
+    price: 800,
     color: "from-orange-500 to-red-600",
   },
   {
@@ -98,7 +98,7 @@ const courses = [
     level: "Dễ",
     rating: 4.4,
     students: 650,
-    price: "Miễn phí",
+    price: 700,
     color: "from-blue-500 to-blue-700",
   },
   {
@@ -114,7 +114,7 @@ const courses = [
     level: "Trung bình",
     rating: 4.7,
     students: 1200,
-    price: "Miễn phí",
+    price: 1300,
     color: "from-purple-600 to-purple-800",
   },
   {
@@ -130,7 +130,7 @@ const courses = [
     level: "Dễ",
     rating: 4.3,
     students: 520,
-    price: "Miễn phí",
+    price: 600,
     color: "from-pink-600 to-pink-800",
   },
   {
@@ -146,7 +146,7 @@ const courses = [
     level: "Trung bình",
     rating: 4.8,
     students: 1800,
-    price: "Miễn phí",
+    price: 1600,
     color: "from-indigo-500 to-indigo-700",
   },
 ];
@@ -236,7 +236,7 @@ const Courses = () => {
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
               Chọn khóa học phù hợp với sở thích và mục tiêu học tập của bạn. 
-              Tất cả khóa học đều miễn phí và được thiết kế bởi các chuyên gia hàng đầu.
+              Tất cả khóa học đều được thiết kế bởi các chuyên gia hàng đầu với giá cả phải chăng.
             </p>
             
             {/* Search Bar */}
@@ -291,7 +291,7 @@ const Courses = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-sm font-medium text-white bg-gradient-to-r ${course.color}`}>
-                  {course.price}
+                  {course.price.toLocaleString()} xu
                 </div>
                 <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-medium ${getLevelColor(course.level)}`}>
                   {course.level}
@@ -385,6 +385,8 @@ const Courses = () => {
         onClose={handleModalClose}
         courseTitle={selectedCourse?.title}
         courseId={selectedCourse?.courseId}
+        price={selectedCourse?.price}
+        onSuccess={handleModalSuccess}
       />
     </div>
   );

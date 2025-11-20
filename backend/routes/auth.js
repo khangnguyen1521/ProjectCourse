@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'teacher', 'student'],
     default: 'student',
   },
+  coins: { type: Number, default: 5000 }, // Số xu của người dùng, mặc định 5000
   coursesCompleted: [String], // Mảng các khóa học đã đăng ký
   examResults: [ // Mảng lưu kết quả bài kiểm tra
     {
@@ -61,6 +62,7 @@ router.post('/register', async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      coins: 5000, // Khởi tạo 5000 xu cho người dùng mới
       coursesCompleted: [],
       examResults: [],
       progress: new Map(),
@@ -112,6 +114,7 @@ router.post('/login', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        coins: user.coins || 5000, // Trả về số xu của người dùng
         coursesCompleted: user.coursesCompleted || [],
         examResults: user.examResults || [],
         progress: user.progress || new Map(),
@@ -143,8 +146,8 @@ router.get('/allusers', async (req, res) => {
 // Student đăng ký khóa học
 router.post('/enroll-course', async (req, res) => {
   try {
-    const { userId, courseId } = req.body;
-    console.log(`Enrolling user ${userId} in course ${courseId}`);
+    const { userId, courseId, price } = req.body;
+    console.log(`Enrolling user ${userId} in course ${courseId} with price ${price}`);
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại' });
@@ -154,6 +157,23 @@ router.post('/enroll-course', async (req, res) => {
       return res.status(400).json({ message: 'Đã đăng ký khóa học này' });
     }
 
+    // Kiểm tra số xu
+    const coursePrice = price || 0;
+    // Nếu user chưa có trường coins (user cũ), khởi tạo mặc định 5000 xu
+    if (user.coins === undefined || user.coins === null) {
+      user.coins = 5000;
+    }
+    const userCoins = user.coins;
+    
+    if (userCoins < coursePrice) {
+      return res.status(400).json({ 
+        message: `Bạn không đủ xu để mua khóa học này. Bạn cần ${coursePrice} xu nhưng chỉ có ${userCoins} xu.`,
+        insufficient: true
+      });
+    }
+
+    // Trừ xu và đăng ký khóa học
+    user.coins = userCoins - coursePrice;
     user.coursesCompleted.push(courseId);
     
     // Khởi tạo tiến độ cho khóa học mới
@@ -167,9 +187,13 @@ router.post('/enroll-course', async (req, res) => {
     });
 
     await user.save();
-    console.log(`User ${userId} successfully enrolled in course ${courseId}. New courses:`, user.coursesCompleted);
+    console.log(`User ${userId} successfully enrolled in course ${courseId}. New coins: ${user.coins}, New courses:`, user.coursesCompleted);
 
-    res.json({ message: 'Đăng ký khóa học thành công', coursesCompleted: user.coursesCompleted });
+    res.json({ 
+      message: 'Đăng ký khóa học thành công', 
+      coursesCompleted: user.coursesCompleted,
+      coins: user.coins
+    });
   } catch (error) {
     console.error('Error enrolling in course:', error);
     res.status(500).json({ message: 'Lỗi server khi đăng ký khóa học' });
